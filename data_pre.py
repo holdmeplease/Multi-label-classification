@@ -1,6 +1,7 @@
 from torch.utils import data
 from PIL import Image
 import torchvision.transforms as transforms
+import torch
 
 Transform = transforms.Compose([
     transforms.Resize(224),
@@ -37,7 +38,7 @@ class myDataSet(data.Dataset):
         cur_img = Image.open(self.root + self.imgs[index][0] + '.jpg')
         data_once = self.transform(cur_img)
         label_once = self.imgs[index][1]
-        return data_once, label_once
+        return data_once, torch.Tensor(label_once)
     
     def __len__(self):
         return len(self.imgs)
