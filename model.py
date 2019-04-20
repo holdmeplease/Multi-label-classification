@@ -9,7 +9,7 @@ import torchvision.transforms as transforms
 import torchvision as tv
 from torch.utils.data import DataLoader
 import torchvision.datasets as dsets
-from tools import myDataSet
+from data_pre import myDataSet
 import os
 
 model_path = './model_para'#dir to save para
@@ -17,7 +17,7 @@ BATCH_SIZE = 100
 LR = 0.01
 EPOCH = 5
 
-transform = transforms.Compose([
+Transform = transforms.Compose([
     transforms.Resize(224),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
@@ -25,10 +25,10 @@ transform = transforms.Compose([
                          std  = [ 0.229, 0.224, 0.225 ]),
     ])
 
-trainData = myDataSet(root='../data/train', label='../data/train/train_label',transform=transform)
-testData = myDataSet(root='../data/test', label='../data/test/test_label',transform=transform)
+trainData = myDataSet('JPEGImages/', 0, Transform)
+testData = myDataSet('JPEGImages/' ,1, Transform)
 
-trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=2)
+trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
 testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=BATCH_SIZE, shuffle=False)
 
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
