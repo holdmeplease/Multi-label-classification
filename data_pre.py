@@ -23,17 +23,15 @@ class myDataSet(data.Dataset):
             words = line.split()
             if self.istest:
                 if words[0][0:4] == '2007' or words[0][0:4] == '2008':
-                    label_cur = [0 for i in range(20)]
+                    label_cur = []
                     for i in range(1, len(words)):
-                        label_cur[int(words[i])] = 1
-                        #label_cur.append(int(words[i]))
+                        label_cur.append(int(words[i]))
                     self.imgs.append([words[0], label_cur])
             else:
                 if not (words[0][0:4] == '2007' or words[0][0:4] == '2008'):
-                    label_cur = [0 for i in range(20)]
+                    label_cur = []
                     for i in range(1, len(words)):
-                        label_cur[int(words[i])] = 1
-                        #label_cur.append(int(words[i]))
+                        label_cur.append(int(words[i]))
                     self.imgs.append([words[0], label_cur])
                     
     def __getitem__(self, index):
@@ -45,8 +43,8 @@ class myDataSet(data.Dataset):
     def __len__(self):
         return len(self.imgs)
 
-trainData = myDataSet('JPEGImages/', 0, Transform)
-testData = myDataSet('JPEGImages/' ,1, Transform)
+#trainData = myDataSet('JPEGImages/', 0, Transform)
+#testData = myDataSet('JPEGImages/' ,1, Transform)
 
-print('trainData', len(trainData))
-print('testData', len(testData))
+#print('trainData', len(trainData))
+#print('testData', len(testData))

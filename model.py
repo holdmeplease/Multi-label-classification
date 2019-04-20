@@ -13,7 +13,7 @@ from data_pre import myDataSet
 import os
 
 model_path = './model_para'#dir to save para
-BATCH_SIZE = 100
+BATCH_SIZE = 30
 LR = 0.01
 EPOCH = 5
 
