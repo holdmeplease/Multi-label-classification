@@ -18,7 +18,7 @@ LR = 0.01
 EPOCH = 5
 
 Transform = transforms.Compose([
-    transforms.Resize(224),
+    transforms.Resize((224,224)),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize(mean = [ 0.485, 0.456, 0.406 ],
