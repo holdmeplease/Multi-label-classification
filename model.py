@@ -35,8 +35,7 @@ vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
     vgg_16.load_state_dict(torch.load(os.path.join(model_path, 'vgg_16.pkl')))
 else:
-    vgg_16_temp=v_models.vgg16(pretrained=True)
-    pretrained_dict = vgg_16_temp.state_dict()
+    pretrained_dict = torch.load('vgg16-397923af.pth')
     modified_dict = vgg_16.state_dict()
     pretrained_dict = {k: v for k, v in pretrained_dict.items() if k !='classifier.6.weight' and k!='classifier.6.bias'}
     modified_dict.update(pretrained_dict)
