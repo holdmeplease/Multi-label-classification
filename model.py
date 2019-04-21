@@ -13,7 +13,7 @@ from data_pre import myDataSet
 import os
 
 parser = argparse.ArgumentParser(description='Input:BatchSize initial LR EPOCH')
-parser.add_argument('--test', type=int,
+parser.add_argument('--test', type=int,default=1,
  help='set test mode')
 parser.add_argument('--model_path', type=str,default='./model_para',
  help='dir to save para')
@@ -100,13 +100,3 @@ else:
         torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
     # Save the Trained Model
     torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
-
-
-
-
-
-
-
-
-
-
