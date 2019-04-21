@@ -10,7 +10,6 @@ import torchvision as tv
 from torch.utils.data import DataLoader
 import torchvision.datasets as dsets
 from data_pre import myDataSet
-import torch.nn.functional as F
 import os
 
 model_path = './model_para'#dir to save para
@@ -57,7 +56,7 @@ for epoch in range(EPOCH):
         # Forward + Backward + Optimize
         optimizer.zero_grad()
         outputs = vgg_16(images)
-        output_sig=F.sigmoid(outputs)
+        output_sig=torch.sigmoid(outputs)
         #print(outputs.size())
         #print(labels.size())
         loss = cost(output_sig, labels)
@@ -78,6 +77,7 @@ total = 0
 for images, labels in testLoader:
     images = Variable(images).cuda()
     outputs = vgg_16(images)
+    outputs=torch.sigmoid(outputs)
     _, predicted = outputs.data>=0.5
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
