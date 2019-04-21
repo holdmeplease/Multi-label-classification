@@ -90,7 +90,7 @@ else:
     correct = 0
     total = 0
     for images, labels in testLoader:
-        images = Variable(images).cuda()
+        images = Variable(images)
         print(images.size())
         outputs = vgg_16(images)
         outputs=torch.sigmoid(outputs)
