@@ -57,7 +57,7 @@ for epoch in range(EPOCH):
         # Forward + Backward + Optimize
         optimizer.zero_grad()
         outputs = vgg_16(images)
-        output_sig=F.sigmoid(output)
+        output_sig=F.sigmoid(outputs)
         #print(outputs.size())
         #print(labels.size())
         loss = cost(output_sig, labels)
@@ -78,7 +78,7 @@ total = 0
 for images, labels in testLoader:
     images = Variable(images).cuda()
     outputs = vgg_16(images)
-    _, predicted = torch.max(outputs.data, 1)
+    _, predicted = outputs.data>=0.5
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
 
