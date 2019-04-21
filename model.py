@@ -13,9 +13,9 @@ from data_pre import myDataSet
 import os
 
 model_path = './model_para'#dir to save para
-BATCH_SIZE = 1
+BATCH_SIZE = 64
 LR = 0.01
-EPOCH = 1
+EPOCH = 100
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
@@ -42,12 +42,14 @@ else:
     vgg_16.load_state_dict(modified_dict)
 vgg_16.cuda()
 
-# Loss and Optimizer
+# Loss  Optimizer Scheduler
 cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
 optimizer = torch.optim.Adam(vgg_16.parameters(), lr=LR)
+scheduler = StepLR(optimizer, step_size=33, gamma=0.1)
 
 # Train the model
 for epoch in range(EPOCH):
+    scheduler.step(epoch)
     for i, (images, labels) in enumerate(trainLoader):
     #for images, labels in trainLoader:
         images = Variable(images).cuda()
@@ -81,7 +83,7 @@ for images, labels in testLoader:
     print(predicted.type())
     print(labels.type())   
     total += labels.size(0)
-    correct += (predicted.cpu() == labels).sum()
+    correct += (predicted.cpu().float() == labels).sum()
 
 print('Test Accuracy of the model on the 10000 test images: %d %%' % (100 * correct / total))
 
