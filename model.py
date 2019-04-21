@@ -44,8 +44,8 @@ testData = myDataSet('JPEGImages/' ,1, Transform)
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
 testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=1, shuffle=False)
 
-viz=Visdom()
-viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
+#viz=Visdom()
+#viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
 
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
@@ -57,7 +57,7 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
 vgg_16.cuda() 
-global_step=0
+#global_step=0
 if not args.test:
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
@@ -81,8 +81,8 @@ if not args.test:
             loss = cost(output_sig, labels)
             loss.backward()
             optimizer.step()
-            viz.line([loss.item()],[global_step],win='train_loss',update='append')
-            global_step+=1
+            #viz.line([loss.item()],[global_step],win='train_loss',update='append')
+            #global_step+=1
             #validating
             if (i+1) % 100 == 0 :
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
@@ -103,7 +103,7 @@ else:
         predicted = outputs.data>=0.5
         total += labels.size(0)*labels.size(1)
         correct += (predicted.float() == labels).sum()
-    viz.images(images.view(3,224,224),win='pic')
-    viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
-    viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
+    #viz.images(images.view(3,224,224),win='pic')
+    #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
+    #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
