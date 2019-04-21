@@ -78,14 +78,14 @@ for images, labels in testLoader:
     images = Variable(images).cuda()
     outputs = vgg_16(images)
     outputs=torch.sigmoid(outputs)
-    _, predicted = outputs>=0.5
+    predicted = outputs.data>=0.5
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
 
 print('Test Accuracy of the model on the 10000 test images: %d %%' % (100 * correct / total))
 
 # Save the Trained Model
-torch.save(nn.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
+torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
 
 
 
