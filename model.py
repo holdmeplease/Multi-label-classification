@@ -29,6 +29,10 @@ model_path=args.model_path
 BATCH_SIZE=args.BATCH_SIZE
 LR=args.LR
 EPOCH=args.EPOCH
+print('model_path:',model_path)
+print('batch_size:',BATCH_SIZE)
+print('initial LR:',LR)
+print('epoch:',EPOCH)
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
