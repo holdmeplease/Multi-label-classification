@@ -45,7 +45,7 @@ vgg_16.cuda()
 # Loss  Optimizer Scheduler
 cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
 optimizer = torch.optim.Adam(vgg_16.parameters(), lr=LR)
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=33, gamma=0.1)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=33, gamma=0.1)
 
 # Train the model
 for epoch in range(EPOCH):
