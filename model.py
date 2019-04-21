@@ -103,7 +103,7 @@ else:
         predicted = outputs.data>=0.5
         total += labels.size(0)*labels.size(1)
         correct += (predicted.float() == labels).sum()
-    viz.images(data.view(3,224,224),win='pic')
+    viz.images(images.view(3,224,224),win='pic')
     viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
