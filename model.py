@@ -90,8 +90,8 @@ for images, labels in testLoader:
     outputs = vgg_16(images)
     outputs=torch.sigmoid(outputs)
     predicted = outputs.data>=0.5
-    total += labels.size(0)
-    print(labels.size(0))
+    total += labels.size()
+    print(labels.size())
     correct += (predicted.cpu().float() == labels).sum()
 print(total)
 print(correct)
