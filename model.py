@@ -10,6 +10,7 @@ import torchvision as tv
 from torch.utils.data import DataLoader
 import torchvision.datasets as dsets
 from data_pre import myDataSet
+import torch.nn.functional as F
 import os
 
 model_path = './model_para'#dir to save para
@@ -43,7 +44,7 @@ else:
 vgg_16.cuda()
 
 # Loss and Optimizer
-cost = nn.CrossEntropyLoss()
+cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
 optimizer = torch.optim.Adam(vgg_16.parameters(), lr=LR)
 
 # Train the model
@@ -51,14 +52,15 @@ for epoch in range(EPOCH):
     for i, (images, labels) in enumerate(trainLoader):
     #for images, labels in trainLoader:
         images = Variable(images).cuda()
-        labels = Variable(labels.long()).cuda()
+        labels = Variable(labels).cuda()
 
         # Forward + Backward + Optimize
         optimizer.zero_grad()
         outputs = vgg_16(images)
-        print(outputs.size())
-        print(labels.size())
-        loss = cost(outputs, labels)
+        output_sig=F.sigmoid(output)
+        #print(outputs.size())
+        #print(labels.size())
+        loss = cost(output_sig, labels)
         loss.backward()
         optimizer.step()
         #validating
