@@ -22,6 +22,7 @@ parser.add_argument('--LR', type=float,default=0.01,
 parser.add_argument('--EPOCH', type=int,default=100,
  help='epoch')
 args = parser.parse_args()
+print(args)
 print(model_path)
 print(BATCH_SIZE)
 print(LR)
