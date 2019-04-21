@@ -13,9 +13,9 @@ from data_pre import myDataSet
 import os
 
 model_path = './model_para'#dir to save para
-BATCH_SIZE = 30
+BATCH_SIZE = 100
 LR = 0.01
-EPOCH = 5
+EPOCH = 20
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
