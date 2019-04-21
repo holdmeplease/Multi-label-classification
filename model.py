@@ -97,7 +97,8 @@ else:
     total = 0
     for images, labels in testLoader:
         images = Variable(images).cuda()
-        outputs = vgg_16(images).cuda()
+        labels= Variable(labels).cuda()
+        outputs = vgg_16(images)
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
         total += labels.size(0)*labels.size(1)
