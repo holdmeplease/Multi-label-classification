@@ -89,7 +89,7 @@ if not args.test:
             #global_step+=1
             #validating
             if (i+1) % 100 == 0 :
-                print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
+                print ('Epoch [%d/%d], Iter[%d/%d] Loss %.9f' %
                     (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.item()))
         torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
     # Save the Trained Model
