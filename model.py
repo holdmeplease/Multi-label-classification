@@ -13,9 +13,9 @@ from data_pre import myDataSet
 import os
 
 model_path = './model_para'#dir to save para
-BATCH_SIZE = 100
+BATCH_SIZE = 1
 LR = 0.01
-EPOCH = 20
+EPOCH = 1
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
@@ -78,6 +78,8 @@ for images, labels in testLoader:
     outputs = vgg_16(images)
     outputs=torch.sigmoid(outputs)
     predicted = outputs.data>=0.5
+    print(predicted.type())
+    print(labels.type())   
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
 
