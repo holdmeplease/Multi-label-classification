@@ -10,6 +10,7 @@ import torchvision as tv
 from torch.utils.data import DataLoader
 import torchvision.datasets as dsets
 from data_pre import myDataSet
+from visdom import Visdom
 import os
 
 parser = argparse.ArgumentParser(description='VGG-16 Input:BatchSize initial LR EPOCH')
@@ -43,6 +44,9 @@ testData = myDataSet('JPEGImages/' ,1, Transform)
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
 testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=1, shuffle=False)
 
+viz=Visdom()
+viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
+
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
     vgg_16.load_state_dict(torch.load(os.path.join(model_path, 'vgg_16.pkl')))
@@ -52,7 +56,8 @@ else:
     pretrained_dict = {k: v for k, v in pretrained_dict.items() if k !='classifier.6.weight' and k!='classifier.6.bias'}
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
-vgg_16.cuda()   
+vgg_16.cuda() 
+global=0
 if not args.test:
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
@@ -76,6 +81,7 @@ if not args.test:
             loss = cost(output_sig, labels)
             loss.backward()
             optimizer.step()
+            viz.line([loss.item()],[global],win='train_loss',update='append')
             #validating
             if (i+1) % 100 == 0 :
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
@@ -90,9 +96,12 @@ else:
     total = 0
     for images, labels in testLoader:
         images = Variable(images).cuda()
-        outputs = vgg_16(images)
+        outputs = vgg_16(images).cuda()
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
         total += labels.size(0)*labels.size(1)
-        correct += (predicted.cpu().float() == labels).sum()
+        correct += (predicted.float() == labels).sum()
+    viz.images(data.view(3,224,224),win='pic')
+    viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
+    viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
