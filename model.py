@@ -66,7 +66,7 @@ for epoch in range(EPOCH):
         #validating
         if (i+1) % 100 == 0 :
             print ('Epoch [%d/%d], Iter[%d/%d] Loss. %.4f' %
-                (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.data[0]))
+                (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.item))
         if (i+1)%1000 ==0:
             torch.save(nn.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
 
