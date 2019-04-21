@@ -13,7 +13,7 @@ from data_pre import myDataSet
 import os
 
 parser = argparse.ArgumentParser(description='Input:BatchSize initial LR EPOCH')
-parser.add_argument('--test', type=int
+parser.add_argument('--test', type=int,
  help='set test mode')
 parser.add_argument('--model_path', type=str,default='./model_para',
  help='dir to save para')
