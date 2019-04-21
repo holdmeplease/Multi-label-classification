@@ -51,7 +51,7 @@ for epoch in range(EPOCH):
     for i, (images, labels) in enumerate(trainLoader):
     #for images, labels in trainLoader:
         images = Variable(images).cuda()
-        labels = Variable(labels).cuda()
+        labels = Variable(labels.long()).cuda()
 
         # Forward + Backward + Optimize
         optimizer.zero_grad()
