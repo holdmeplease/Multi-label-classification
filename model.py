@@ -15,7 +15,7 @@ import os
 model_path = './model_para'#dir to save para
 BATCH_SIZE = 64
 LR = 0.01
-EPOCH = 100
+EPOCH = 1
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
