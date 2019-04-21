@@ -51,7 +51,7 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
 vgg_16.cuda()
-
+'''
 # Loss  Optimizer Scheduler
 cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
 optimizer = torch.optim.Adam(vgg_16.parameters(), lr=LR)
@@ -79,7 +79,7 @@ for epoch in range(EPOCH):
             print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
                 (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.item()))
     torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
-
+'''
 # Test the model
 vgg_16.eval()
 correct = 0
@@ -91,9 +91,12 @@ for images, labels in testLoader:
     outputs=torch.sigmoid(outputs)
     predicted = outputs.data>=0.5
     total += labels.size(0)
+    print(labels.size(0))
     correct += (predicted.cpu().float() == labels).sum()
+print(total)
+print(correct)
 
-print('Test Accuracy of the model on the 10000 test images: %d %%' % (100 * correct / total))
+print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
 
 # Save the Trained Model
 torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
