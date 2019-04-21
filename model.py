@@ -41,7 +41,7 @@ trainData = myDataSet('JPEGImages/', 0, Transform)
 testData = myDataSet('JPEGImages/' ,1, Transform)
 
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
-testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=1, shuffle=False)
+testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=BATCH_SIZE, shuffle=False)
 
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
