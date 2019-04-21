@@ -26,10 +26,6 @@ model_path=args.model_path
 BATCH_SIZE=args.BATCH_SIZE
 LR=args.LR
 EPOCH=args.EPOCH
-print(model_path)
-print(BATCH_SIZE)
-print(LR)
-print(EPOCH)
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
