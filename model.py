@@ -67,7 +67,7 @@ for epoch in range(EPOCH):
             print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
                 (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.item()))
         if (i+1)%1000 ==0:
-            torch.save(nn.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
+            torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
 
 # Test the model
 vgg_16.eval()
@@ -78,7 +78,7 @@ for images, labels in testLoader:
     images = Variable(images).cuda()
     outputs = vgg_16(images)
     outputs=torch.sigmoid(outputs)
-    _, predicted = outputs.data>=0.5
+    _, predicted = outputs>=0.5
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
 
