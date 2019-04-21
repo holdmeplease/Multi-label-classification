@@ -82,6 +82,7 @@ if not args.test:
             loss.backward()
             optimizer.step()
             viz.line([loss.item()],[global],win='train_loss',update='append')
+            global+=1
             #validating
             if (i+1) % 100 == 0 :
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
