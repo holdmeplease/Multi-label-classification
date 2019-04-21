@@ -60,6 +60,7 @@ if args.test:
     total = 0
     for images, labels in testLoader:
         images = Variable(images).cuda()
+        print(images.size())
         outputs = vgg_16(images)
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
