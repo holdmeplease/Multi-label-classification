@@ -53,24 +53,7 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
     
-if args.test:
-    # Test the model
-    vgg_16.eval()
-    correct = 0
-    total = 0
-    for images, labels in testLoader:
-        images = Variable(images).cuda()
-        print(images.size())
-        outputs = vgg_16(images)
-        outputs=torch.sigmoid(outputs)
-        predicted = outputs.data>=0.5
-        total += labels.size(0)
-        print(labels.size())
-        correct += (predicted.cpu().float() == labels).sum()
-    print(total)
-    print(correct)
-    print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
-else:
+if not args.test:
     vgg_16.cuda()
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
@@ -101,3 +84,20 @@ else:
         torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
     # Save the Trained Model
     torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
+else:
+    # Test the model
+    vgg_16.eval()
+    correct = 0
+    total = 0
+    for images, labels in testLoader:
+        images = Variable(images).cuda()
+        print(images.size())
+        outputs = vgg_16(images)
+        outputs=torch.sigmoid(outputs)
+        predicted = outputs.data>=0.5
+        total += labels.size(0)
+        print(labels.size())
+        correct += (predicted.cpu().float() == labels).sum()
+    print(total)
+    print(correct)
+    print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
