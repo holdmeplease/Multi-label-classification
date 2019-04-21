@@ -57,7 +57,7 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
 vgg_16.cuda() 
-global=0
+global_step=0
 if not args.test:
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
@@ -81,8 +81,8 @@ if not args.test:
             loss = cost(output_sig, labels)
             loss.backward()
             optimizer.step()
-            viz.line([loss.item()],[global],win='train_loss',update='append')
-            global+=1
+            viz.line([loss.item()],[global_step],win='train_loss',update='append')
+            global_step+=1
             #validating
             if (i+1) % 100 == 0 :
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.4f' %
