@@ -41,7 +41,7 @@ trainData = myDataSet('JPEGImages/', 0, Transform)
 testData = myDataSet('JPEGImages/' ,1, Transform)
 
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
-testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=BATCH_SIZE, shuffle=False)
+testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=1, shuffle=False)
 
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
@@ -52,9 +52,8 @@ else:
     pretrained_dict = {k: v for k, v in pretrained_dict.items() if k !='classifier.6.weight' and k!='classifier.6.bias'}
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
-    
+vgg_16.cuda()   
 if not args.test:
-    vgg_16.cuda()
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
     optimizer = torch.optim.Adam(vgg_16.parameters(), lr=LR)
@@ -90,14 +89,10 @@ else:
     correct = 0
     total = 0
     for images, labels in testLoader:
-        images = Variable(images)
-        print(images.size())
+        images = Variable(images).cuda()
         outputs = vgg_16(images)
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
-        total += labels.size(0)
-        print(labels.size())
+        total += labels.size(0)*labels.size(1)
         correct += (predicted.cpu().float() == labels).sum()
-    print(total)
-    print(correct)
     print('Test Accuracy of the model on the test images: %d %%' % (100 * correct / total))
