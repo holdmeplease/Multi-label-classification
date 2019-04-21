@@ -1,7 +1,7 @@
 import numpy
 import torch
 from torch import nn
-import math
+import argparse
 from torch.autograd import Variable
 import torchvision.models as v_models
 from torchsummary import summary
@@ -12,10 +12,20 @@ import torchvision.datasets as dsets
 from data_pre import myDataSet
 import os
 
-model_path = './model_para'#dir to save para
-BATCH_SIZE = 64
-LR = 0.01
-EPOCH = 1
+parser = argparse.ArgumentParser(description='Input:BatchSize initial LR EPOCH')
+parser.add_argument('--model_path', type=str,default='./model_para',
+ help='dir to save para')
+parser.add_argument('--BATCH_SIZE', type=int,default=64,
+ help='batch_size')
+parser.add_argument('--LR', type=float,default=0.01,
+ help='Learning Rate')
+parser.add_argument('--EPOCH', type=int,default=100,
+ help='epoch')
+args = parser.parse_args()
+print(model_path)
+print(BATCH_SIZE)
+print(LR)
+print(EPOCH)
 
 Transform = transforms.Compose([
     transforms.Resize((224,224)),
