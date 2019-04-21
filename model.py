@@ -56,6 +56,8 @@ for epoch in range(EPOCH):
         # Forward + Backward + Optimize
         optimizer.zero_grad()
         outputs = vgg_16(images)
+        print(output.size())
+        print(labels.size())
         loss = cost(outputs, labels)
         loss.backward()
         optimizer.step()
