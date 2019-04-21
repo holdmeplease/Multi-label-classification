@@ -53,7 +53,7 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
     
-if arg.test:
+if args.test:
     # Test the model
     vgg_16.eval()
     correct = 0
