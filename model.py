@@ -12,8 +12,8 @@ import torchvision.datasets as dsets
 from data_pre import myDataSet
 import os
 
-parser = argparse.ArgumentParser(description='Input:BatchSize initial LR EPOCH')
-parser.add_argument('--test', type=int,default=1,
+parser = argparse.ArgumentParser(description='VGG-16 Input:BatchSize initial LR EPOCH')
+parser.add_argument('--test','-t' action = 'store_true',
  help='set test mode')
 parser.add_argument('--model_path', type=str,default='./model_para',
  help='dir to save para')
