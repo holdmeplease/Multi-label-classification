@@ -116,10 +116,8 @@ else:
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
-    print(correct)
-    print(total)
-    print('Test Accuracy of the model on the train images: %.4f %%' % (100 * correct / total))
-    
+    print('Test Accuracy of the model on the train images(mAcc): %.4f %%' % (100 * correct / total))
+    print('Test Accuracy of the model on the train images(wAcc): %.4f %%' % (100 * correct / total))
     correct = 0
     total = 0
     for images, labels in testLoader:
@@ -128,12 +126,12 @@ else:
         outputs = vgg_16(images)
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
+        #equal to predicted=outputs.data>=0
         total += labels.size(0)*labels.size(1)
         correct += (predicted.float() == labels).sum()
-    print(correct)
-    print(total)
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
-    print('Test Accuracy of the model on the test images: %.4f %%' % (100 * correct / total))
+    print('Test Accuracy of the model on the test images(mAcc): %.4f %%' % (100 * correct / total))
+    print('Test Accuracy of the model on the test images(wAcc): %.4f %%' % (100 * correct / total))
 print(summary(vgg_16,(3,224,224)))
