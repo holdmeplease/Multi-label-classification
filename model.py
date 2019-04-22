@@ -47,7 +47,7 @@ trainData = myDataSet('JPEGImages/', 0, Transform)
 testData = myDataSet('JPEGImages/' ,1, Transform)
 
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
-testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=1, shuffle=False)
+testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=BATCH_SIZE, shuffle=False)
 
 #viz=Visdom(use_incoming_socket=False)
 #viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
