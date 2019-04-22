@@ -117,9 +117,9 @@ else:
         vec_1 += (predicted.float() == labels).cpu().float().sum(0) #correct_num
         vec_2 += labels.cpu().sum(0)#appear_num
         correct += (predicted.float() == labels).sum()
-    vec_1=vec_1.float()/len(trainLoader)
+    vec_1=vec_1.float()/len(trainData)
     vec_2=vec_2.float()/vec_2.sum()
-    print(len(trainLoader))
+    print(len(trainData))
     print(vec_1)
     print(vec_2)
     #viz.images(images.view(3,224,224),win='pic')
@@ -145,7 +145,7 @@ else:
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
-    vec_1=vec_1.float()/len(testLoader)
+    vec_1=vec_1.float()/len(testData)
     vec_2=vec_2.float()/vec_2.sum()
     print(vec_1)
     print(vec_2)
