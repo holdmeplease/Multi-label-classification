@@ -71,7 +71,7 @@ if not args.test:
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
     optimizer = torch.optim.Adam(vgg_16.parameters(), lr=LR)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.1)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=8, gamma=0.3)
 
     # Train the model
     for epoch in range(EPOCH):
