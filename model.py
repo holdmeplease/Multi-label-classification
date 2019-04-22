@@ -95,7 +95,30 @@ if not args.test:
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.9f' %
                     (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.item()))
         
-        writer.add_scalar('Train/Loss', loss.item(),epoch)
+        correct = 0
+        total = 0
+        vec_1=torch.Tensor(1,20).zero_()
+        vec_2=torch.Tensor(1,20).zero_()
+        for images, labels in testLoader:
+            images = Variable(images).cuda()
+            labels= Variable(labels).cuda()
+            outputs = vgg_16(images)
+            outputs=torch.sigmoid(outputs)
+            predicted = outputs.data>=0.5
+            vec_1 += (predicted.float() == labels).cpu().float().sum(0) #correct_num
+            vec_2 += labels.cpu().sum(0)#appear_num
+            #equal to predicted=outputs.data>=0
+            total += labels.size(0)*labels.size(1)
+            correct += (predicted.float() == labels).sum()
+
+        vec_1=vec_1.float()/len(testData)
+        vec_2=vec_2.float()/vec_2.sum()
+        print('TestSet Class Accuracy:',vec_1)
+        print('Epoch [%d/%d]:Test Accuracy of the model on the test images(mAcc): %.4f %%' % (epoch+1,EPOCH,100 * float(correct) / float(total)))
+        print('Epoch [%d/%d]Test Accuracy of the model on the test images(wAcc): %.4f %%' % (epoch+1,EPOCH,100 * (vec_1*vec_2).sum()))
+        writer.add_scalar('Train/mAcc', float(correct) / float(total),epoch)       
+        writer.add_scalar('Train/wAcc', (vec_1*vec_2).sum(),epoch)
+        
         torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
     # Save the Trained Model    
     writer.close()
