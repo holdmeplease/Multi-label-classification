@@ -115,7 +115,8 @@ if not args.test:
         vec_2=vec_2.float()/vec_2.sum()
         print('TestSet Class Accuracy:',vec_1)
         print('Epoch [%d/%d]:Test Accuracy of the model on the test images(mAcc): %.4f %%' % (epoch+1,EPOCH,100 * float(correct) / float(total)))
-        print('Epoch [%d/%d]Test Accuracy of the model on the test images(wAcc): %.4f %%' % (epoch+1,EPOCH,100 * (vec_1*vec_2).sum()))
+        print('Epoch [%d/%d]:Test Accuracy of the model on the test images(wAcc): %.4f %%' % (epoch+1,EPOCH,100 * (vec_1*vec_2).sum()))
+        writer.add_scalar('Train/loss', loss.item(),epoch)
         writer.add_scalar('Train/mAcc', float(correct) / float(total),epoch)       
         writer.add_scalar('Train/wAcc', (vec_1*vec_2).sum(),epoch)
         
