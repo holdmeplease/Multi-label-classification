@@ -49,8 +49,8 @@ testData = myDataSet('JPEGImages/' ,1, Transform)
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
 testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=BATCH_SIZE, shuffle=False)
 
-#viz=Visdom(use_incoming_socket=False)
-#viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
+viz=Visdom(use_incoming_socket=False)
+viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
 
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
@@ -62,7 +62,7 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
 vgg_16.cuda() 
-#global_step=0
+global_step=0
 if not args.test:
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
@@ -73,7 +73,6 @@ if not args.test:
     for epoch in range(EPOCH):
         scheduler.step(epoch)
         for i, (images, labels) in enumerate(trainLoader):
-        #for images, labels in trainLoader:
             images = Variable(images).cuda()
             labels = Variable(labels).cuda()
 
@@ -86,8 +85,8 @@ if not args.test:
             loss = cost(output_sig, labels)
             loss.backward()
             optimizer.step()
-            #viz.line([loss.item()],[global_step],win='train_loss',update='append')
-            #global_step+=1
+            viz.line([loss.item()],[global_step],win='train_loss',update='append')
+            global_step+=1
             #validating
             if (i+1) % 100 == 0 :
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.9f' %
