@@ -122,7 +122,7 @@ else:
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
-    print('Test Accuracy of the model on the train images(mAcc): %.4f %%' % (100 * correct.float() / total.float()))
+    print('Test Accuracy of the model on the train images(mAcc): %.4f %%' % (100 * float(correct) / float(total)))
     print('Test Accuracy of the model on the train images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
     correct = 0
     total = 0
@@ -144,6 +144,6 @@ else:
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     vec_1=vec_1.float()/len(trainLoader)
     vec_2=vec_2.float()/vec_2.sum()
-    print('Test Accuracy of the model on the test images(mAcc): %.4f %%' % (100 * correct.float() / total.float()))
+    print('Test Accuracy of the model on the test images(mAcc): %.4f %%' % (100 * float(correct) / float(total)))
     print('Test Accuracy of the model on the test images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
 print(summary(vgg_16,(3,224,224)))
