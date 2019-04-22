@@ -105,6 +105,8 @@ else:
     vgg_16.eval()
     correct = 0
     total = 0
+    vec_1=torch.Tensor(1,20).zero_()
+    vec_2=torch.Tensor(1,20).zero_()
     for images, labels in trainLoader:
         images = Variable(images).cuda()
         labels= Variable(labels).cuda()
@@ -112,26 +114,36 @@ else:
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
         total += labels.size(0)*labels.size(1)
+        vec_1 += (predicted.float() == labels).sum(0) #correct_num
+        vec_2 += labels.sum(0)#appear_num
         correct += (predicted.float() == labels).sum()
+    vec_1=vec_1/len(trainLoader)
+    vec_2=vec_2/vec_2.sum()
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the train images(mAcc): %.4f %%' % (100 * correct / total))
-    print('Test Accuracy of the model on the train images(wAcc): %.4f %%' % (100 * correct / total))
+    print('Test Accuracy of the model on the train images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
     correct = 0
     total = 0
+    vec_1=torch.Tensor(1,20).zero_()
+    vec_2=torch.Tensor(1,20).zero_()
     for images, labels in testLoader:
         images = Variable(images).cuda()
         labels= Variable(labels).cuda()
         outputs = vgg_16(images)
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
+        vec_1 += (predicted.float() == labels).sum(0) #correct_num
+        vec_2 += labels.sum(0)#appear_num
         #equal to predicted=outputs.data>=0
         total += labels.size(0)*labels.size(1)
         correct += (predicted.float() == labels).sum()
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
+    vec_1=vec_1/len(trainLoader)
+    vec_2=vec_2/vec_2.sum()
     print('Test Accuracy of the model on the test images(mAcc): %.4f %%' % (100 * correct / total))
-    print('Test Accuracy of the model on the test images(wAcc): %.4f %%' % (100 * correct / total))
+    print('Test Accuracy of the model on the test images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
 print(summary(vgg_16,(3,224,224)))
