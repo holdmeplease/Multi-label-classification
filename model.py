@@ -114,7 +114,7 @@ else:
         outputs=torch.sigmoid(outputs)
         predicted = outputs.data>=0.5
         total += labels.size(0)*labels.size(1)
-        vec_1 += (predicted.float() == labels).cpu().cpu().sum(0) #correct_num
+        vec_1 += (predicted.float() == labels).cpu().sum(0) #correct_num
         vec_2 += labels.cpu().sum(0)#appear_num
         correct += (predicted.float() == labels).sum()
     vec_1=vec_1.float()/len(trainLoader)
