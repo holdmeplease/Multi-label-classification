@@ -12,8 +12,10 @@ import torchvision.datasets as dsets
 from data_pre import myDataSet
 from visdom import Visdom
 import os
+from tensorboardX import SummaryWriter
 
 torch.cuda.set_device(1)
+
 parser = argparse.ArgumentParser(description='VGG-16 Input:BatchSize initial LR EPOCH')
 parser.add_argument('--test','-t', action = 'store_true',
  help='set test mode')
@@ -49,8 +51,9 @@ testData = myDataSet('JPEGImages/' ,1, Transform)
 trainLoader = torch.utils.data.DataLoader(dataset=trainData, batch_size=BATCH_SIZE, shuffle=True,num_workers=3)
 testLoader = torch.utils.data.DataLoader(dataset=testData, batch_size=BATCH_SIZE, shuffle=False)
 
-viz=Visdom(use_incoming_socket=False)
-viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
+#viz=Visdom(use_incoming_socket=False)
+#viz.line([0.],[0.],win='train_loss',opts=dict(title='train_loss'))
+writer = SummaryWriter('VGG_16')
 
 vgg_16 = v_models.vgg16(pretrained=False, num_classes=20)
 if os.path.exists(os.path.join(model_path, 'vgg_16.pkl')):
@@ -62,7 +65,8 @@ else:
     modified_dict.update(pretrained_dict)
     vgg_16.load_state_dict(modified_dict)
 vgg_16.cuda() 
-global_step=0
+#global_step=0
+
 if not args.test:
     # Loss  Optimizer Scheduler
     cost = nn.BCELoss(weight=None, size_average=True)#input:Float target:Float
@@ -75,7 +79,6 @@ if not args.test:
         for i, (images, labels) in enumerate(trainLoader):
             images = Variable(images).cuda()
             labels = Variable(labels).cuda()
-
             # Forward + Backward + Optimize
             optimizer.zero_grad()
             outputs = vgg_16(images)
@@ -85,14 +88,17 @@ if not args.test:
             loss = cost(output_sig, labels)
             loss.backward()
             optimizer.step()
-            viz.line([loss.item()],[global_step],win='train_loss',update='append')
-            global_step+=1
+            #viz.line([loss.item()],[global_step],win='train_loss',update='append')
+            #global_step+=1
             #validating
             if (i+1) % 100 == 0 :
                 print ('Epoch [%d/%d], Iter[%d/%d] Loss %.9f' %
                     (epoch+1, EPOCH, i+1, len(trainData)//BATCH_SIZE, loss.item()))
+        
+        writer.add_scalar('Train/Loss', loss.item(),epoch)
         torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
-    # Save the Trained Model
+    # Save the Trained Model    
+    writer.close()
     torch.save(vgg_16.state_dict(), os.path.join(model_path, 'vgg_16.pkl'))
 else:
     # Test the model
@@ -130,3 +136,4 @@ else:
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the test images: %.4f %%' % (100 * correct / total))
+print(summary(vgg_16,(3,224,224)))
