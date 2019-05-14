@@ -151,7 +151,7 @@ else:
     vec_2=vec_2.float()/vec_2.sum()
     precision=TP/(TP+FP)
     recall=TP/(TP+FN)
-    F1=2*precision*recal/(precision+recall)
+    F1=2*precision*recall/(precision+recall)
     F1_mean=F1.sum()/len(F1)
     print('TrainSet Class Accuracy:',vec_1)
     #viz.images(images.view(3,224,224),win='pic')
