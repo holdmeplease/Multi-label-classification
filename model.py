@@ -161,11 +161,15 @@ else:
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the train images(mAcc): %.4f %%' % (100 * float(correct) / float(total)))
     print('Test Accuracy of the model on the train images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
-    print('mean F1 score of the model on the train images: %.4f ' % (F1_mean))    
+
+        print('mean F1 score of the model on the train images: %.4f ' % (F1_mean))
     correct = 0
     total = 0
     vec_1=torch.Tensor(1,20).zero_()
     vec_2=torch.Tensor(1,20).zero_()
+    TP=torch.Tensor(1,20).zero_()
+    FP=torch.Tensor(1,20).zero_()
+    FN=torch.Tensor(1,20).zero_()
     for images, labels in testLoader:
         images = Variable(images).cuda()
         labels= Variable(labels).cuda()
@@ -176,13 +180,23 @@ else:
         vec_2 += labels.cpu().sum(0)#appear_num
         #equal to predicted=outputs.data>=0
         total += labels.size(0)*labels.size(1)
+        TP+=((predicted.float() == labels).cpu().float()*(labels==1).cpu().float()).sum(0)
+        FP+=((predicted.float() != labels).cpu().float()*(labels==1).cpu().float()).sum(0)
+        FN+=((predicted.float() != labels).cpu().float()*(labels==0).cpu().float()).sum(0)
         correct += (predicted.float() == labels).sum()
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     vec_1=vec_1.float()/len(testData)
     vec_2=vec_2.float()/vec_2.sum()
+    precision=TP/(TP+FP)
+    recall=TP/(TP+FN)
+    F1=2*precision*recall/(precision+recall)
+    F1_mean=F1.sum()/len(F1)
+    print(TP)
+    print(F1)
     print('TestSet Class Accuracy:',vec_1)
     print('Test Accuracy of the model on the test images(mAcc): %.4f %%' % (100 * float(correct) / float(total)))
     print('Test Accuracy of the model on the test images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
+    print('mean F1 score of the model on the test images: %.4f ' % (F1_mean))
 print(summary(vgg_16,(3,224,224)))
