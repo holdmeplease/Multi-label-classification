@@ -161,8 +161,7 @@ else:
     #viz.text(str(predicted.detach().cpu().numpy()),win='predicted_label',opts=dict(title='predicted_label'))
     print('Test Accuracy of the model on the train images(mAcc): %.4f %%' % (100 * float(correct) / float(total)))
     print('Test Accuracy of the model on the train images(wAcc): %.4f %%' % (100 * (vec_1*vec_2).sum()))
-
-        print('mean F1 score of the model on the train images: %.4f ' % (F1_mean))
+    print('mean F1 score of the model on the train images: %.4f ' % (F1_mean))
     correct = 0
     total = 0
     vec_1=torch.Tensor(1,20).zero_()
