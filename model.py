@@ -153,6 +153,8 @@ else:
     recall=TP/(TP+FN)
     F1=2*precision*recall/(precision+recall)
     F1_mean=F1.sum()/len(F1)
+    print(TP)
+    print(F1)
     print('TrainSet Class Accuracy:',vec_1)
     #viz.images(images.view(3,224,224),win='pic')
     #viz.text(str(labels.detach().cpu().numpy()),win='true_label',opts=dict(title='true_label'))
