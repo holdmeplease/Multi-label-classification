@@ -14,7 +14,7 @@ from visdom import Visdom
 import os
 from tensorboardX import SummaryWriter
 
-torch.cuda.set_device(1)
+torch.cuda.set_device(4)
 
 parser = argparse.ArgumentParser(description='VGG-16 Input:BatchSize initial LR EPOCH')
 parser.add_argument('--test','-t', action = 'store_true',
